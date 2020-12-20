@@ -31,9 +31,9 @@ export default {
     const updateGreeting = () => {
       greetings.value += 'Hello! ';
     };
-    watch(greetings, (newValue, old) => {
-      console.log(newValue, old);
-      document.title = 'update ' + greetings.value;
+    watch([greetings, () => data.count], (newValue, old) => {
+      console.log('new: ', newValue, ' old: ', old);
+      document.title = 'update ' + greetings.value + data.count;
     });
     const refData = toRefs(data);
     return {
