@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="../assets/logo.png">
+    <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
     <h1>{{count}}</h1>
     <h1>{{double}}</h1>
     <h1>{{greetings}}</h1>
-    <button @click="increase">👍+1</button><br/>
+    <button @click="increase">👍+1</button><br />
     <button @click="updateGreeting">Update Title</button>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, computed, reactive, toRefs, } from 'vue'
+import { ref, computed, reactive, toRefs } from 'vue';
 interface DataProps {
   count: number;
   double: number;
@@ -28,25 +28,26 @@ interface CatResult {
 }
 export default {
   name: 'App',
-  components: {
-  },
+  components: {},
   setup() {
-    const data: DataProps  = reactive({
+    const data: DataProps = reactive({
       count: 0,
-      increase: () => { data.count++},
+      increase: () => {
+        data.count++;
+      },
       double: computed(() => data.count * 2),
-    })
-    const greetings = ref('')
+    });
+    const greetings = ref('');
     const updateGreeting = () => {
-      greetings.value += 'Hello! '
-    }
-    const refData = toRefs(data)
+      greetings.value += 'Hello! ';
+    };
+    const refData = toRefs(data);
     return {
       ...refData,
       greetings,
-      updateGreeting
-    }
-  }
+      updateGreeting,
+    };
+  },
 };
 </script>
 
