@@ -10,21 +10,11 @@
 </template>
 
 <script lang="ts">
-import { ref, computed, reactive, toRefs } from 'vue';
+import { ref, computed, reactive, toRefs, watch } from 'vue';
 interface DataProps {
   count: number;
   double: number;
   increase: () => void;
-}
-interface DogResult {
-  message: string;
-  status: string;
-}
-interface CatResult {
-  id: string;
-  url: string;
-  width: number;
-  height: number;
 }
 export default {
   name: 'App',
@@ -41,6 +31,10 @@ export default {
     const updateGreeting = () => {
       greetings.value += 'Hello! ';
     };
+    watch(greetings, (newValue, old) => {
+      console.log(newValue, old);
+      document.title = 'update ' + greetings.value;
+    });
     const refData = toRefs(data);
     return {
       ...refData,
