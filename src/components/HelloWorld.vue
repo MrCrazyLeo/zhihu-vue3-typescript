@@ -4,6 +4,11 @@
     <h1>{{count}}</h1>
     <h1>{{double}}</h1>
     <h1>{{greetings}}</h1>
+    <h1>X: {{x}},Y: {{y}}</h1>
+    <h1 v-if="loading">Loading!...</h1>
+    <img v-if="loaded"
+         :src="result.message">
+    <br />
     <button @click="increase">👍+1</button><br />
     <button @click="updateGreeting">Update Title</button>
   </div>
@@ -11,10 +16,16 @@
 
 <script lang="ts">
 import { ref, computed, reactive, toRefs, watch } from 'vue';
+import useMousePosition from '../hooks/useMousePosition';
+import useURLLoader from '../hooks/useURLLoader';
 interface DataProps {
   count: number;
   double: number;
   increase: () => void;
+}
+interface DogType {
+  message: string;
+  status: string;
 }
 export default {
   name: 'App',
@@ -31,15 +42,23 @@ export default {
     const updateGreeting = () => {
       greetings.value += 'Hello! ';
     };
-    watch([greetings, () => data.count], (newValue, old) => {
-      console.log('new: ', newValue, ' old: ', old);
-      document.title = 'update ' + greetings.value + data.count;
+    const { x, y } = useMousePosition();
+    const { result, loading, loaded } = useURLLoader<DogType>(
+      'https://dog.ceo/api/breeds/image/random'
+    );
+    watch(result, () => {
+      if (result.value) console.log(333333, result.value.message);
     });
     const refData = toRefs(data);
     return {
       ...refData,
       greetings,
       updateGreeting,
+      x,
+      y,
+      result,
+      loading,
+      loaded,
     };
   },
 };
@@ -55,9 +74,9 @@ export default {
   margin-top: 60px;
 }
 h1 {
-  font-size: 5rem;
+  font-size: 2rem;
 }
 button {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 </style>
