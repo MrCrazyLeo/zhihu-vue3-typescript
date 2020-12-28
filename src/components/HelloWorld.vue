@@ -5,6 +5,7 @@
     <h1>{{double}}</h1>
     <h1>{{greetings}}</h1>
     <h1>X: {{x}},Y: {{y}}</h1>
+    <p>{{error}}</p>
     <Suspense>
       <template #default>
         <div>
@@ -31,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { ref, computed, reactive, toRefs, watch } from 'vue';
+import { ref, computed, reactive, toRefs, watch, onErrorCaptured } from 'vue';
 import useMousePosition from '../hooks/useMousePosition';
 import useURLLoader from '../hooks/useURLLoader';
 import Modal from './Modal.vue';
@@ -60,6 +61,11 @@ export default {
     DogShow,
   },
   setup() {
+    const error = ref(null);
+    onErrorCaptured((e: any) => {
+      error.value = e;
+      return true;
+    });
     const data: DataProps = reactive({
       count: 0,
       increase: () => {
@@ -100,6 +106,7 @@ export default {
       openModal,
       onModalClose,
       modalIsOpen,
+      error,
     };
   },
 };
