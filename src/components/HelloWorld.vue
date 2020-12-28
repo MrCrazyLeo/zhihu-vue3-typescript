@@ -5,6 +5,19 @@
     <h1>{{double}}</h1>
     <h1>{{greetings}}</h1>
     <h1>X: {{x}},Y: {{y}}</h1>
+    <Suspense>
+      <template #default>
+        <div>
+          <h1>Promise的数字：</h1>
+          <async-show />
+          <h1>async/await的狗狗：</h1>
+          <dog-show />
+        </div>
+      </template>
+      <template #fallback>
+        <h1>Suspense Loading...</h1>
+      </template>
+    </Suspense>
     <h1 v-if="loading">Loading!...</h1>
     <img v-if="loaded"
          :src="result[0].url">
@@ -22,6 +35,8 @@ import { ref, computed, reactive, toRefs, watch } from 'vue';
 import useMousePosition from '../hooks/useMousePosition';
 import useURLLoader from '../hooks/useURLLoader';
 import Modal from './Modal.vue';
+import AsyncShow from './AsyncShow.vue';
+import DogShow from './DogShow.vue';
 interface DataProps {
   count: number;
   double: number;
@@ -41,6 +56,8 @@ export default {
   name: 'App',
   components: {
     Modal,
+    AsyncShow,
+    DogShow,
   },
   setup() {
     const data: DataProps = reactive({
