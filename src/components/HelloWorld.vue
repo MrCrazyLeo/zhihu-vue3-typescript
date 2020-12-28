@@ -9,6 +9,9 @@
     <img v-if="loaded"
          :src="result[0].url">
     <br />
+    <button @click="openModal">Open Modal</button><br />
+    <modal :isOpen="modalIsOpen"
+           @close-modal="onModalClose"> My Modal !!!!</modal>
     <button @click="increase">👍+1</button><br />
     <button @click="updateGreeting">Update Title</button>
   </div>
@@ -18,6 +21,7 @@
 import { ref, computed, reactive, toRefs, watch } from 'vue';
 import useMousePosition from '../hooks/useMousePosition';
 import useURLLoader from '../hooks/useURLLoader';
+import Modal from './Modal.vue';
 interface DataProps {
   count: number;
   double: number;
@@ -35,7 +39,9 @@ interface CatResult {
 }
 export default {
   name: 'App',
-  components: {},
+  components: {
+    Modal,
+  },
   setup() {
     const data: DataProps = reactive({
       count: 0,
@@ -52,6 +58,15 @@ export default {
     const { result, loading, loaded } = useURLLoader<CatResult[]>(
       'https://api.thecatapi.com/v1/images/search?limit=1'
     );
+
+    const modalIsOpen = ref(false);
+    const openModal = () => {
+      modalIsOpen.value = true;
+    };
+    const onModalClose = () => {
+      modalIsOpen.value = false;
+    };
+
     watch(result, () => {
       if (result.value) console.log(333333, result.value[0].id);
     });
@@ -65,6 +80,9 @@ export default {
       result,
       loading,
       loaded,
+      openModal,
+      onModalClose,
+      modalIsOpen,
     };
   },
 };
